@@ -72,3 +72,4 @@ jobs:
 
       - name: Run Functional Benchmark Test
         run: poetry run pytest tests/test_benchmark_script.py
+
