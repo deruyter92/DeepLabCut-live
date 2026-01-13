@@ -142,7 +142,7 @@ class PyTorchRunner(BaseRunner):
         if single_animal is not None:
             warnings.warn(
                 "The `single_animal` parameter is deprecated and will be removed "
-                "in a future version. The number of individuals will be automaticalliy inferred "
+                "in a future version. The number of individuals will be automatically inferred "
                 "from the model configuration. Remove argument `single_animal` or set "
                 "`single_animal=None` to accept the inferred value and silence this warning.",
                 DeprecationWarning,
