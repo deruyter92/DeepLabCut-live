@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   build:
@@ -25,18 +24,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
       - name: Set up Python
         uses: conda-incubator/setup-miniconda@v3
         with:
           channels: conda-forge,defaults
           channel-priority: strict
           python-version: ${{ matrix.python-version }}
-          
+
       - name: Install ffmpeg
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
@@ -48,8 +42,8 @@ jobs:
             choco install ffmpeg
           fi
         shell: bash
-        
-      - name: Install PyTables through Conda
+
+      - name: Install and test
         shell: bash -el {0}  # Important: activates the conda environment
         run: |
           conda install pytables==3.8.0 "numpy<2"
@@ -65,11 +59,10 @@ jobs:
         run: poetry lock --no-cache
 
       - name: Install project dependencies
-        run: poetry install --with dev
+        run: poetry install --with dev --extras "tf" --extras "pytorch"
           
       - name: Run DLC Live Tests
         run: poetry run dlc-live-test --nodisplay
 
       - name: Run Functional Benchmark Test
         run: poetry run pytest tests/test_benchmark_script.py
-

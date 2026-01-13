@@ -3,6 +3,7 @@ import glob
 import pathlib
 import pytest
 from dlclive import benchmark_videos, download_benchmarking_data
+from dlclive.engine import Engine
 
 @pytest.mark.functional
 def test_benchmark_script_runs(tmp_path):
@@ -20,14 +21,28 @@ def test_benchmark_script_runs(tmp_path):
     pixels = [100, 400] #[2500, 10000]
     n_frames = 5
 
-    for m in dog_models:
-        print(f"Running dog model: {m}")
-        result = benchmark_videos(m, dog_video, output=str(out_dir), n_frames=n_frames, pixels=pixels)
+    for model_path in dog_models:
+        print(f"Running dog model: {model_path}")
+        result = benchmark_videos(
+            model_path=model_path,
+            model_type="base" if Engine.from_model_path(model_path) == Engine.TENSORFLOW else "pytorch",
+            video_path=dog_video,
+            output=str(out_dir),
+            n_frames=n_frames,
+            pixels=pixels
+        )
         print("Dog model result:", result)
 
-    for m in mouse_models:
-        print(f"Running mouse model: {m}")
-        result = benchmark_videos(m, mouse_video, output=str(out_dir), n_frames=n_frames, pixels=pixels)
+    for model_path in mouse_models:
+        print(f"Running mouse model: {model_path}")
+        result = benchmark_videos(
+            model_path=model_path,
+            model_type="base" if Engine.from_model_path(model_path) == Engine.TENSORFLOW else "pytorch",
+            video_path=mouse_video,
+            output=str(out_dir),
+            n_frames=n_frames,
+            pixels=pixels
+        )
         print("Mouse model result:", result)
 
     assert any(out_dir.iterdir())

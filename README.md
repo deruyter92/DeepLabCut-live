@@ -77,8 +77,6 @@ then use TF1.13 with DlC-Live; export with TF2.3, then use TF2.3 with DLC-live).
 
 Note, you can then test your installation by installing poetry (`pip install poetry`), then running:
 
-
-
 ```python
 poetry run dlc-live-test
 ```
